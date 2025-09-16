@@ -22,7 +22,7 @@ function runSanityTests() {
   console.assert(Number(oneClientRoi.toFixed(1)) === 9.0, "ROI should be 9.0 for one $15k case with $1.5k fee");
 }
 
-export default function InjuryAutomationDemo() {
+export default function App() {
   useEffect(() => {
     try {
       runSanityTests();
@@ -121,7 +121,7 @@ export default function InjuryAutomationDemo() {
         </div>
       </section>
 
-      {/* Trust bar (logos instead of testimonials) */}
+      {/* Trust bar */}
       <section className="max-w-6xl mx-auto px-4 -mt-6 pb-4">
         <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 flex flex-wrap items-center justify-center gap-6 text-white/60 text-xs">
           <span className="text-white/70">Featured in / Listed on:</span>
@@ -139,18 +139,9 @@ export default function InjuryAutomationDemo() {
         <h2 className="text-2xl font-bold">How it works</h2>
         <div className="mt-8 grid md:grid-cols-3 gap-6">
           {[
-            {
-              title: "24/7 Intake Coverage",
-              desc: "Every call answered instantly, qualified, and booked straight into your calendar.",
-            },
-            {
-              title: "Conversion Multiplier",
-              desc: "Automated SMS/email follow-up + review engine to turn more leads into signed cases.",
-            },
-            {
-              title: "Proof & Reporting",
-              desc: "Weekly call and booking reports, plus a simple dashboard for reviews and conversions.",
-            },
+            { title: "24/7 Intake Coverage", desc: "Every call answered instantly, qualified, and booked straight into your calendar." },
+            { title: "Conversion Multiplier", desc: "Automated SMS/email follow-up + review engine to turn more leads into signed cases." },
+            { title: "Proof & Reporting", desc: "Weekly call and booking reports, plus a simple dashboard for reviews and conversions." },
           ].map((f, i) => (
             <div key={i} className="rounded-3xl border border-white/10 bg-white/5 p-6">
               <h3 className="font-semibold mb-2">{f.title}</h3>
@@ -259,7 +250,7 @@ export default function InjuryAutomationDemo() {
         </div>
       </section>
 
-      {/* Trust Section (tools/directories) */}
+      {/* Trust Section */}
       <section className="max-w-6xl mx-auto px-4 pb-20">
         <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
           <h2 className="text-2xl font-bold mb-4">Trusted by leading platforms</h2>
