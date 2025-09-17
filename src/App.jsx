@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
 
-/**
- * Lightweight self-tests to catch regressions in simple computations.
- * NOTE: Do not remove existing assertions unless they are wrong.
- */
+const CALENDLY_URL = "https://calendly.com/dariob-injuryautomation/15min?month=2025-09";
+
 function runSanityTests() {
-  // Existing tests (keep):
-  const testRevenue = 15000 * 2; // avg fee * clients
+  const testRevenue = 15000 * 2;
   const fee = 1500;
   const roi = (testRevenue - fee) / fee;
   console.assert(testRevenue === 30000, "Revenue calc should be 30,000");
   console.assert(Number(roi.toFixed(1)) === 19.0, "ROI multiple should be 19.0 when fee is 1500");
 
-  // Additional tests (added):
   const zeroRevenue = 0;
   const zeroRoi = zeroRevenue > 0 ? (zeroRevenue - fee) / fee : 0;
   console.assert(zeroRoi === 0, "ROI should be 0 when revenue is 0");
@@ -24,11 +20,14 @@ function runSanityTests() {
 
 export default function App() {
   useEffect(() => {
-    try {
-      runSanityTests();
-    } catch (e) {
-      console.warn("Sanity tests failed", e);
-    }
+    try { runSanityTests(); } catch (e) { console.warn("Sanity tests failed", e); }
+  }, []);
+
+  // Enable smooth scrolling for anchor jumps (How/Features/Pricing/FAQ, See pricing, etc.)
+  useEffect(() => {
+    const prev = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = "smooth";
+    return () => { document.documentElement.style.scrollBehavior = prev || "auto"; };
   }, []);
 
   const [caseValue, setCaseValue] = useState(15000);
@@ -37,6 +36,11 @@ export default function App() {
   const revenue = caseValue * extraClients;
   const fee = 1500; // monthly price
   const roi = revenue > 0 ? (revenue - fee) / fee : 0;
+
+  const openCalendly = (e) => {
+    e?.preventDefault?.();
+    window.open(CALENDLY_URL, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white">
@@ -55,7 +59,13 @@ export default function App() {
           </nav>
           <div className="flex items-center gap-2">
             <span className="hidden sm:inline-block px-3 py-1 rounded-lg border border-emerald-400/40 text-emerald-300 text-xs">30-day money-back</span>
-            <a href="#demo" className="px-3 py-2 rounded-xl bg-emerald-500 text-neutral-900 text-sm font-semibold hover:opacity-90 shadow">Book a free demo</a>
+            <a
+              href={CALENDLY_URL}
+              onClick={openCalendly}
+              className="px-3 py-2 rounded-xl bg-emerald-500 text-neutral-900 text-sm font-semibold hover:opacity-90 shadow"
+            >
+              Book a free demo
+            </a>
           </div>
         </div>
       </header>
@@ -73,10 +83,17 @@ export default function App() {
               Every call answered 24/7, every lead followed up, and more reviews that bring in cases — all done for you.
             </p>
             <div className="mt-6 flex flex-col sm:flex-row gap-3">
-              <a href="#demo" className="px-5 py-3 rounded-2xl bg-emerald-500 text-neutral-900 font-semibold hover:opacity-90">
+              <a
+                href={CALENDLY_URL}
+                onClick={openCalendly}
+                className="px-5 py-3 rounded-2xl bg-emerald-500 text-neutral-900 font-semibold hover:opacity-90"
+              >
                 Book your free demo
               </a>
-              <a href="#pricing" className="px-5 py-3 rounded-2xl border border-white/20 hover:bg-white/5">
+              <a
+                href="#pricing"
+                className="px-5 py-3 rounded-2xl border border-white/20 hover:bg-white/5"
+              >
                 See pricing
               </a>
             </div>
@@ -202,24 +219,14 @@ export default function App() {
                 </div>
               ))}
             </div>
-            <a href="#demo" className="mt-6 inline-block w-full text-center px-5 py-3 rounded-xl bg-emerald-500 text-neutral-900 font-semibold hover:opacity-90">Start your free demo</a>
+            <a
+              href={CALENDLY_URL}
+              onClick={openCalendly}
+              className="mt-6 inline-block w-full text-center px-5 py-3 rounded-xl bg-emerald-500 text-neutral-900 font-semibold hover:opacity-90"
+            >
+              Start your free demo
+            </a>
           </div>
-        </div>
-      </section>
-
-      {/* Demo form */}
-      <section id="demo" className="max-w-3xl mx-auto px-4 pb-20">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <h2 className="text-2xl font-bold">Book a free demo</h2>
-          <p className="mt-2 text-white/70 text-sm">Tell us a bit about your firm and we’ll show you exactly how the system works.</p>
-          <form className="mt-6 grid md:grid-cols-2 gap-4" onSubmit={(e) => e.preventDefault()}>
-            <input className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-3" placeholder="Full name" />
-            <input className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-3" placeholder="Work email" />
-            <input className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-3 md:col-span-2" placeholder="Firm name" />
-            <input className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-3 md:col-span-2" placeholder="City, State" />
-            <textarea className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-3 md:col-span-2" placeholder="Anything specific you want to see in the demo?" rows={4} />
-            <button className="md:col-span-2 px-5 py-3 rounded-2xl bg-white text-neutral-900 font-semibold hover:opacity-90">Request demo</button>
-          </form>
         </div>
       </section>
 
@@ -255,7 +262,7 @@ export default function App() {
         <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
           <h2 className="text-2xl font-bold mb-4">Trusted by leading platforms</h2>
           <p className="text-white/70 text-sm mb-6">While we’re new, our systems are built on proven technology used by thousands of businesses. Here are a few directories and tools we integrate with:</p>
-          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 opacity-80">
+        <div className="flex flex-wrap justify-center gap-3 sm:gap-4 opacity-80">
             <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">Google Business</span>
             <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">Avvo</span>
             <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">Justia</span>
@@ -280,8 +287,14 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Mobile sticky CTA */}
-      <a href="#demo" className="md:hidden fixed bottom-4 inset-x-4 px-5 py-3 rounded-2xl bg-emerald-500 text-neutral-900 font-semibold text-center shadow-2xl">Book your free demo</a>
+      {/* Mobile sticky CTA → Calendly */}
+      <a
+        href={CALENDLY_URL}
+        onClick={openCalendly}
+        className="md:hidden fixed bottom-4 inset-x-4 px-5 py-3 rounded-2xl bg-emerald-500 text-neutral-900 font-semibold text-center shadow-2xl"
+      >
+        Book your free demo
+      </a>
     </div>
   );
-}  
+}
