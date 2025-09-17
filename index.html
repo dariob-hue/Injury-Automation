@@ -5,20 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Injury Automation</title>
 
-    <!-- Calendly embed styles -->
+    <!-- Calendly styles (for inline widget) -->
     <link
       rel="stylesheet"
       href="https://assets.calendly.com/assets/external/widget.css"
     />
   </head>
   <body class="bg-neutral-950 text-white">
-    <!-- React app mounts here -->
     <div id="root"></div>
 
     <!-- Vite/React entrypoint -->
     <script type="module" src="/src/main.jsx"></script>
 
-    <!-- Calendly embed script -->
+    <!-- Calendly script (optional; App.jsx also loads it if missing) -->
     <script
       src="https://assets.calendly.com/assets/external/widget.js"
       type="text/javascript"
