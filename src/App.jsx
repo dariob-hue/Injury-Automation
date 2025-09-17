@@ -1,12 +1,27 @@
 import React, { useEffect, useState } from "react";
 
-/** Quick sanity tests */
+/** Calendly: link not used for CTAs anymore (we scroll), but keep if needed elsewhere */
+const CALENDLY_URL =
+  "https://calendly.com/dariob-injuryautomation/15min?month=2025-09";
+
+/** Calendly: embed URL (dark theme) */
+const CALENDLY_EMBED_URL =
+  "https://calendly.com/dariob-injuryautomation/15min?hide_gdpr_banner=1&background_color=161616&primary_color=10b981";
+
 function runSanityTests() {
   const testRevenue = 15000 * 2;
   const fee = 1500;
   const roi = (testRevenue - fee) / fee;
   console.assert(testRevenue === 30000, "Revenue calc should be 30,000");
   console.assert(Number(roi.toFixed(1)) === 19.0, "ROI multiple should be 19.0 when fee is 1500");
+
+  const zeroRevenue = 0;
+  const zeroRoi = zeroRevenue > 0 ? (zeroRevenue - fee) / fee : 0;
+  console.assert(zeroRoi === 0, "ROI should be 0 when revenue is 0");
+
+  const oneClientRevenue = 15000 * 1;
+  const oneClientRoi = (oneClientRevenue - fee) / fee;
+  console.assert(Number(oneClientRoi.toFixed(1)) === 9.0, "ROI should be 9.0 for one $15k case with $1.5k fee");
 }
 
 export default function App() {
@@ -14,11 +29,35 @@ export default function App() {
     try { runSanityTests(); } catch (e) { console.warn("Sanity tests failed", e); }
   }, []);
 
-  // Smooth scroll
+  // Smooth in-page scrolling
   useEffect(() => {
     const prev = document.documentElement.style.scrollBehavior;
     document.documentElement.style.scrollBehavior = "smooth";
     return () => { document.documentElement.style.scrollBehavior = prev || "auto"; };
+  }, []);
+
+  // Load Calendly script and init inline widget
+  useEffect(() => {
+    const SRC = "https://assets.calendly.com/assets/external/widget.js";
+    function initCalendly() {
+      const el = document.getElementById("calendly-embed");
+      if (window.Calendly && el) {
+        window.Calendly.initInlineWidget({
+          url: CALENDLY_EMBED_URL,
+          parentElement: el,
+        });
+      } else {
+        setTimeout(initCalendly, 200);
+      }
+    }
+    const existing = document.querySelector(`script[src="${SRC}"]`);
+    if (!existing) {
+      const s = document.createElement("script");
+      s.src = SRC; s.async = true; s.onload = initCalendly;
+      document.body.appendChild(s);
+    } else {
+      initCalendly();
+    }
   }, []);
 
   const [caseValue, setCaseValue] = useState(15000);
@@ -48,10 +87,7 @@ export default function App() {
               30-Day Money-Back
             </span>
             {/* CTA → Scrolls to Calendly embed */}
-            <a
-              href="#demo"
-              className="px-3 py-2 rounded-xl bg-emerald-500 text-neutral-900 text-sm font-semibold hover:opacity-90 shadow"
-            >
+            <a href="#demo" className="px-3 py-2 rounded-xl bg-emerald-500 text-neutral-900 text-sm font-semibold hover:opacity-90 shadow">
               Book a free demo
             </a>
           </div>
@@ -71,16 +107,10 @@ export default function App() {
               Every call answered 24/7, every lead followed up, and more reviews that bring in cases — all done for you.
             </p>
             <div className="mt-6 flex flex-col sm:flex-row gap-3">
-              <a
-                href="#demo"
-                className="px-5 py-3 rounded-2xl bg-emerald-500 text-neutral-900 font-semibold hover:opacity-90"
-              >
+              <a href="#demo" className="px-5 py-3 rounded-2xl bg-emerald-500 text-neutral-900 font-semibold hover:opacity-90">
                 Book your free demo
               </a>
-              <a
-                href="#pricing"
-                className="px-5 py-3 rounded-2xl border border-white/20 hover:bg-white/5"
-              >
+              <a href="#pricing" className="px-5 py-3 rounded-2xl border border-white/20 hover:bg-white/5">
                 See pricing
               </a>
             </div>
@@ -95,7 +125,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* ROI calculator (unchanged) */}
+          {/* ROI calculator */}
           <div className="relative">
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl">
               <h3 className="font-semibold mb-3">ROI quick calculator</h3>
@@ -139,15 +169,136 @@ export default function App() {
         </div>
       </section>
 
-      {/* ...How It Works, Features, Pricing, FAQ, etc. remain unchanged... */}
+      {/* Trust bar */}
+      <section className="max-w-6xl mx-auto px-4 -mt-6 pb-4">
+        <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 flex flex-wrap items-center justify-center gap-6 text-white/60 text-xs">
+          <span className="text-white/70">Featured in / Listed on:</span>
+          <span className="opacity-70">Avvo</span>
+          <span className="opacity-70">Justia</span>
+          <span className="opacity-70">FindLaw</span>
+          <span className="opacity-70">BBB</span>
+          <span className="opacity-70">Yelp</span>
+          <span className="opacity-70">Google Business</span>
+        </div>
+      </section>
 
-      {/* Pricing CTA (also scrolls to demo embed now) */}
-      <a
-        href="#demo"
-        className="mt-6 inline-block w-full text-center px-5 py-3 rounded-xl bg-emerald-500 text-neutral-900 font-semibold hover:opacity-90"
-      >
-        Start your free demo
-      </a>
+      {/* How It Works */}
+      <section id="how" className="max-w-6xl mx-auto px-4 py-16">
+        <h2 className="text-2xl font-bold">How It Works</h2>
+        <div className="mt-8 grid md:grid-cols-3 gap-6">
+          {[
+            { title: "24/7 Intake Coverage", desc: "Every call answered instantly, qualified, and booked straight into your calendar." },
+            { title: "Conversion Multiplier", desc: "Automated SMS/email follow-up + review engine to turn more leads into signed cases." },
+            { title: "Proof & Reporting", desc: "Weekly call and booking reports, plus a simple dashboard for reviews and conversions." },
+          ].map((f, i) => (
+            <div key={i} className="rounded-3xl border border-white/10 bg-white/5 p-6">
+              <h3 className="font-semibold mb-2">{f.title}</h3>
+              <p className="text-white/70 text-sm">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Features */}
+      <section id="features" className="max-w-6xl mx-auto px-4 py-4">
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="rounded-3xl p-6 border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+            <h3 className="font-semibold mb-2">Call routing & qualification</h3>
+            <ul className="list-disc list-inside text-white/70 text-sm space-y-2">
+              <li>Custom intake script (injury type, date, location, insurance)</li>
+              <li>Live or AI answering with instant SMS callback on missed rings</li>
+              <li>Calendar booking with confirmations and reminders</li>
+            </ul>
+          </div>
+          <div className="rounded-3xl p-6 border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+            <h3 className="font-semibold mb-2">Follow-up & reviews</h3>
+            <ul className="list-disc list-inside text-white/70 text-sm space-y-2">
+              <li>Day-0 to Day-7 drip for new leads via SMS + email</li>
+              <li>Automated review requests with your Google review link</li>
+              <li>No-show rescue and old-lead reactivation sequences</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section id="pricing" className="max-w-6xl mx-auto px-4 py-16">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-8 grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h2 className="text-2xl font-bold">Simple, flat pricing</h2>
+            <p className="mt-2 text-white/80">$1,500/month. No contracts. Cancel anytime. One extra client pays for it 10× over.</p>
+            <p className="mt-4 text-emerald-300 font-semibold">If you hate it, you get your money back.</p>
+            <ul className="mt-6 text-sm text-white/80 space-y-2">
+              <li>✓ 24/7 answering & intake</li>
+              <li>✓ Qualification & calendar booking</li>
+              <li>✓ Follow-up automation (SMS/email)</li>
+              <li>✓ Review growth engine</li>
+              <li>✓ Weekly call + booking reports</li>
+            </ul>
+          </div>
+          <div className="rounded-2xl bg-neutral-900 border border-white/10 p-6">
+            <h3 className="font-semibold">What results look like</h3>
+            <div className="mt-4 grid grid-cols-3 gap-3 text-center">
+              {[
+                { label: "Answer rate", value: "99%" },
+                { label: "Consults booked", value: "+8/mo" },
+                { label: "New reviews", value: "+10/90d" },
+              ].map((m, i) => (
+                <div key={i} className="rounded-xl bg-black/40 p-4 border border-white/10">
+                  <div className="text-xs uppercase text-white/60">{m.label}</div>
+                  <div className="text-xl font-bold">{m.value}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA now scrolls to Calendly embed */}
+            <a
+              href="#demo"
+              className="mt-6 inline-block w-full text-center px-5 py-3 rounded-xl bg-emerald-500 text-neutral-900 font-semibold hover:opacity-90"
+            >
+              Start your free demo
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="max-w-6xl mx-auto px-4 pb-24">
+        <h2 className="text-2xl font-bold">FAQ</h2>
+        <div className="mt-6 grid md:grid-cols-2 gap-6">
+          <div className="rounded-3xl border border-white/10 p-6 bg-white/5">
+            <h3 className="font-semibold">What exactly do I get for $1,500/month?</h3>
+            <p className="mt-2 text-white/70 text-sm">24/7 call answering and intake, qualification and calendar booking, automated follow-up for new leads, review requests to past clients, and weekly call + booking reports.</p>
+          </div>
+          <div className="rounded-3xl border border-white/10 p-6 bg-white/5">
+            <h3 className="font-semibold">Is there a contract?</h3>
+            <p className="mt-2 text-white/70 text-sm">No. Month-to-month. Cancel anytime. <span className="text-emerald-300 font-semibold">And if you hate it, you get 100% of your money back in the first 30 days.</span></p>
+          </div>
+          <div className="rounded-3xl border border-white/10 p-6 bg-white/5">
+            <h3 className="font-semibold">Do you replace my receptionist?</h3>
+            <p className="mt-2 text-white/70 text-sm">No — we make sure no call slips through the cracks, especially after-hours and weekends. Your team keeps doing what they do best.</p>
+          </div>
+          <div className="rounded-3xl border border-white/10 p-6 bg-white/5">
+            <h3 className="font-semibold">How fast can we start?</h3>
+            <p className="mt-2 text-white/70 text-sm">Setup takes under a week. You’ll see answered calls and booked consults immediately once we go live.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* DEMO (embedded Calendly) */}
+      <section id="demo" className="max-w-4xl mx-auto px-4 pb-24">
+        <div className="rounded-3xl border border-white/10 bg-neutral-900/70 backdrop-blur-sm p-6">
+          <h2 className="text-2xl font-bold">Book a Free Demo</h2>
+          <p className="mt-2 text-white/70 text-sm">
+            Pick a time that works for you—no back-and-forth. Your booking is confirmed instantly.
+          </p>
+          <div
+            id="calendly-embed"
+            className="mt-6 rounded-2xl overflow-hidden"
+            style={{ minWidth: "320px", height: "880px" }}
+          />
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="border-t border-white/10">
@@ -160,7 +311,7 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Mobile sticky CTA → Scrolls to demo embed */}
+      {/* Mobile sticky CTA → scroll to Calendly */}
       <a
         href="#demo"
         className="md:hidden fixed bottom-4 inset-x-4 px-5 py-3 rounded-2xl bg-emerald-500 text-neutral-900 font-semibold text-center shadow-2xl"
@@ -169,4 +320,4 @@ export default function App() {
       </a>
     </div>
   );
-} 
+}
