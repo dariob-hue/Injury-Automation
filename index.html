@@ -1,13 +1,28 @@
 <!doctype html>
-<html>
-  <head>    <!-- in index.html <head> -->
-<link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" />
-<meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Injury Automation</title>
+
+    <!-- Calendly embed styles -->
+    <link
+      rel="stylesheet"
+      href="https://assets.calendly.com/assets/external/widget.css"
+    />
   </head>
-  <body>
+  <body class="bg-neutral-950 text-white">
+    <!-- React app mounts here -->
     <div id="root"></div>
+
+    <!-- Vite/React entrypoint -->
     <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Calendly embed script -->
+    <script
+      src="https://assets.calendly.com/assets/external/widget.js"
+      type="text/javascript"
+      async
+    ></script>
   </body>
 </html>
