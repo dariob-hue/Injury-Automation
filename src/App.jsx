@@ -156,4 +156,190 @@ export default function App() {
                   <div className="text-xl font-bold">${fee.toLocaleString()}</div>
                 </div>
                 <div className="rounded-2xl bg-neutral-900 p-4 border border-white/10">
-                  <div clas
+                  <div className="text-xs uppercase text-white/60">ROI multiple</div>
+                  <div className="text-xl font-bold">{roi > 0 ? `${roi.toFixed(1)}×` : "—"}</div>
+                </div>
+              </div>
+              <p className="mt-3 text-xs text-white/60">* Calculator is illustrative. Actual results vary by market and intake quality.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust bar */}
+      <section className="max-w-6xl mx-auto px-4 -mt-6 pb-4">
+        <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 flex flex-wrap items-center justify-center gap-6 text-white/60 text-xs">
+          <span className="text-white/70">Featured in / Listed on:</span>
+          <span className="opacity-70">Avvo</span>
+          <span className="opacity-70">Justia</span>
+          <span className="opacity-70">FindLaw</span>
+          <span className="opacity-70">BBB</span>
+          <span className="opacity-70">Yelp</span>
+          <span className="opacity-70">Google Business</span>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section id="how" className="max-w-6xl mx-auto px-4 py-16">
+        <h2 className="text-2xl font-bold">How It Works</h2>
+        <div className="mt-8 grid md:grid-cols-3 gap-6">
+          {[
+            { title: "24/7 Intake Coverage", desc: "Every call answered instantly, qualified, and booked straight into your calendar." },
+            { title: "Conversion Multiplier", desc: "Automated SMS/email follow-up + review engine to turn more leads into signed cases." },
+            { title: "Proof & Reporting", desc: "Weekly call and booking reports, plus a simple dashboard for reviews and conversions." },
+          ].map((f, i) => (
+            <div key={i} className="rounded-3xl border border-white/10 bg-white/5 p-6">
+              <h3 className="font-semibold mb-2">{f.title}</h3>
+              <p className="text-white/70 text-sm">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Features */}
+      <section id="features" className="max-w-6xl mx-auto px-4 py-4">
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="rounded-3xl p-6 border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+            <h3 className="font-semibold mb-2">Call routing & qualification</h3>
+            <ul className="list-disc list-inside text-white/70 text-sm space-y-2">
+              <li>Custom intake script (injury type, date, location, insurance)</li>
+              <li>Live or AI answering with instant SMS callback on missed rings</li>
+              <li>Calendar booking with confirmations and reminders</li>
+            </ul>
+          </div>
+          <div className="rounded-3xl p-6 border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+            <h3 className="font-semibold mb-2">Follow-up & reviews</h3>
+            <ul className="list-disc list-inside text-white/70 text-sm space-y-2">
+              <li>Day-0 to Day-7 drip for new leads via SMS + email</li>
+              <li>Automated review requests with your Google review link</li>
+              <li>No-show rescue and old-lead reactivation sequences</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section id="pricing" className="max-w-6xl mx-auto px-4 py-16">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-8 grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h2 className="text-2xl font-bold">Simple, flat pricing</h2>
+            <p className="mt-2 text-white/80">$1,500/month. No contracts. Cancel anytime. One extra client pays for it 10× over.</p>
+            <p className="mt-4 text-emerald-300 font-semibold">If you hate it, you get your money back.</p>
+            <ul className="mt-6 text-sm text-white/80 space-y-2">
+              <li>✓ 24/7 answering & intake</li>
+              <li>✓ Qualification & calendar booking</li>
+              <li>✓ Follow-up automation (SMS/email)</li>
+              <li>✓ Review growth engine</li>
+              <li>✓ Weekly call + booking reports</li>
+            </ul>
+          </div>
+          <div className="rounded-2xl bg-neutral-900 border border-white/10 p-6">
+            <h3 className="font-semibold">What results look like</h3>
+            <div className="mt-4 grid grid-cols-3 gap-3 text-center">
+              {[
+                { label: "Answer rate", value: "99%" },
+                { label: "Consults booked", value: "+8/mo" },
+                { label: "New reviews", value: "+10/90d" },
+              ].map((m, i) => (
+                <div key={i} className="rounded-xl bg-black/40 p-4 border border-white/10">
+                  <div className="text-xs uppercase text-white/60">{m.label}</div>
+                  <div className="text-xl font-bold">{m.value}</div>
+                </div>
+              ))}
+            </div>
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-block w-full text-center px-5 py-3 rounded-xl bg-emerald-500 text-neutral-900 font-semibold hover:opacity-90"
+            >
+              Start your free demo
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Demo (Embedded Calendly) */}
+      <section id="demo" className="max-w-3xl mx-auto px-4 pb-20">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <h2 className="text-2xl font-bold">Book a Free Demo</h2>
+          <p className="mt-2 text-white/70 text-sm">
+            Pick a time that works for you—no back-and-forth. Your booking is confirmed instantly.
+          </p>
+          <div
+            className="calendly-inline-widget mt-6 rounded-2xl overflow-hidden"
+            data-url={CALENDLY_URL}
+            style={{ minWidth: "320px", height: "700px" }}
+          />
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="max-w-6xl mx-auto px-4 pb-24">
+        <h2 className="text-2xl font-bold">FAQ</h2>
+        <div className="mt-6 grid md:grid-cols-2 gap-6">
+          <div className="rounded-3xl border border-white/10 p-6 bg-white/5">
+            <h3 className="font-semibold">What exactly do I get for $1,500/month?</h3>
+            <p className="mt-2 text-white/70 text-sm">24/7 call answering and intake, qualification and calendar booking, automated follow-up for new leads, review requests to past clients, and weekly call + booking reports.</p>
+          </div>
+          <div className="rounded-3xl border border-white/10 p-6 bg-white/5">
+            <h3 className="font-semibold">Is there a contract?</h3>
+            <p className="mt-2 text-white/70 text-sm">No. Month-to-month. Cancel anytime. <span className="text-emerald-300 font-semibold">And if you hate it, you get 100% of your money back in the first 30 days.</span></p>
+          </div>
+          <div className="rounded-3xl border border-white/10 p-6 bg-white/5">
+            <h3 className="font-semibold">Do you replace my receptionist?</h3>
+            <p className="mt-2 text-white/70 text-sm">No — we make sure no call slips through the cracks, especially after-hours and weekends. Your team keeps doing what they do best.</p>
+          </div>
+          <div className="rounded-3xl border border-white/10 p-6 bg-white/5">
+            <h3 className="font-semibold">How fast can we start?</h3>
+            <p className="mt-2 text-white/70 text-sm">Setup takes under a week. You’ll see answered calls and booked consults immediately once we go live.</p>
+          </div>
+          <div className="rounded-3xl border border-emerald-400/30 p-6 bg-emerald-500/5 md:col-span-2">
+            <h3 className="font-semibold text-emerald-300">What if I’m not satisfied?</h3>
+            <p className="mt-2 text-white/70 text-sm">We stand behind our service. Try it risk-free for 30 days. If you’re not completely satisfied, we’ll refund your full first month’s fee — no questions asked.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Section */}
+      <section className="max-w-6xl mx-auto px-4 pb-20">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
+          <h2 className="text-2xl font-bold mb-4">Trusted by leading platforms</h2>
+          <p className="text-white/70 text-sm mb-6">While we’re new, our systems are built on proven technology used by thousands of businesses. Here are a few directories and tools we integrate with:</p>
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 opacity-80">
+            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">Google Business</span>
+            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">Avvo</span>
+            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">Justia</span>
+            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">FindLaw</span>
+            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">BBB</span>
+            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">Yelp</span>
+            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">CallRail</span>
+            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">Twilio</span>
+            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">Calendly</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-white/10">
+        <div className="max-w-6xl mx-auto px-4 py-10 text-sm text-white/60 flex flex-col md:flex-row gap-2 md:items-center md:justify-between">
+          <div>© {new Date().getFullYear()} InjuryAutomation. All rights reserved.</div>
+          <div className="flex gap-4">
+            <a href="#" className="hover:text-white">Terms</a>
+            <a href="#" className="hover:text-white">Privacy</a>
+          </div>
+        </div>
+      </footer>
+
+      {/* Mobile sticky CTA → Calendly */}
+      <a
+        href={CALENDLY_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="md:hidden fixed bottom-4 inset-x-4 px-5 py-3 rounded-2xl bg-emerald-500 text-neutral-900 font-semibold text-center shadow-2xl"
+      >
+        Book your free demo
+      </a>
+    </div>
+  );
+}
