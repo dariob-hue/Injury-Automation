@@ -6,7 +6,7 @@ const CALENDLY_URL =
 
 /** Calendly: embed URL (dark theme) */
 const CALENDLY_EMBED_URL =
-  "https://calendly.com/dariob-injuryautomation/15min?hide_gdpr_banner=1&background_color=161616&primary_color=10b981";
+  "https://calendly.com/dariob-injuryautomation/15min?hide_gdpr_banner=1&background_color=000000&text_color=ffffff&primary_color=10b981";
 
 function runSanityTests() {
   const testRevenue = 15000 * 2;
