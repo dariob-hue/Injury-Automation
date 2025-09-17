@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-/** Calendly: link target (opens in new tab) */
+/** Calendly: link target (extra option if you want to open a new tab somewhere) */
 const CALENDLY_URL =
   "https://calendly.com/dariob-injuryautomation/15min?month=2025-09";
-
-/** Calendly: embed URL (explicit init; themed + no banner) */
-const CALENDLY_EMBED_URL =
-  "https://calendly.com/dariob-injuryautomation/15min?hide_gdpr_banner=1&background_color=161616&primary_color=10b981";
 
 /** Quick sanity tests so we don’t regress computations */
 function runSanityTests() {
@@ -37,35 +33,6 @@ export default function App() {
     return () => { document.documentElement.style.scrollBehavior = prev || "auto"; };
   }, []);
 
-  // Load Calendly script and explicitly init the inline widget
-  useEffect(() => {
-    const SRC = "https://assets.calendly.com/assets/external/widget.js";
-
-    function initCalendly() {
-      if (window.Calendly && document.getElementById("calendly-embed")) {
-        window.Calendly.initInlineWidget({
-          url: CALENDLY_EMBED_URL,
-          parentElement: document.getElementById("calendly-embed"),
-        });
-      } else {
-        // Try again shortly until script loads and DOM is ready
-        setTimeout(initCalendly, 200);
-      }
-    }
-
-    const existing = document.querySelector(`script[src="${SRC}"]`);
-    if (!existing) {
-      const s = document.createElement("script");
-      s.src = SRC;
-      s.async = true;
-      s.onload = initCalendly;
-      document.body.appendChild(s);
-    } else {
-      // If already present (e.g., from index.html), initialize immediately
-      initCalendly();
-    }
-  }, []);
-
   const [caseValue, setCaseValue] = useState(15000);
   const [extraClients, setExtraClients] = useState(1);
 
@@ -92,10 +59,9 @@ export default function App() {
             <span className="hidden sm:inline-block px-3 py-1 rounded-lg border border-emerald-400/40 text-emerald-300 text-xs">
               30-Day Money-Back
             </span>
+            {/* Scroll to inline Calendly */}
             <a
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#demo"
               className="px-3 py-2 rounded-xl bg-emerald-500 text-neutral-900 text-sm font-semibold hover:opacity-90 shadow"
             >
               Book a free demo
@@ -117,10 +83,9 @@ export default function App() {
               Every call answered 24/7, every lead followed up, and more reviews that bring in cases — all done for you.
             </p>
             <div className="mt-6 flex flex-col sm:flex-row gap-3">
+              {/* Scroll to inline Calendly */}
               <a
-                href={CALENDLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#demo"
                 className="px-5 py-3 rounded-2xl bg-emerald-500 text-neutral-900 font-semibold hover:opacity-90"
               >
                 Book your free demo
@@ -266,6 +231,7 @@ export default function App() {
                 </div>
               ))}
             </div>
+            {/* External link alternative (kept for convenience) */}
             <a
               href={CALENDLY_URL}
               target="_blank"
@@ -274,67 +240,6 @@ export default function App() {
             >
               Start your free demo
             </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Demo (Embedded Calendly via explicit init) */}
-      <section id="demo" className="max-w-3xl mx-auto px-4 pb-20">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <h2 className="text-2xl font-bold">Book a Free Demo</h2>
-          <p className="mt-2 text-white/70 text-sm">
-            Pick a time that works for you—no back-and-forth. Your booking is confirmed instantly.
-          </p>
-          <div
-            id="calendly-embed"
-            className="mt-6 rounded-2xl overflow-hidden"
-            style={{ minWidth: "320px", height: "700px" }}
-          />
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section id="faq" className="max-w-6xl mx-auto px-4 pb-24">
-        <h2 className="text-2xl font-bold">FAQ</h2>
-        <div className="mt-6 grid md:grid-cols-2 gap-6">
-          <div className="rounded-3xl border border-white/10 p-6 bg-white/5">
-            <h3 className="font-semibold">What exactly do I get for $1,500/month?</h3>
-            <p className="mt-2 text-white/70 text-sm">24/7 call answering and intake, qualification and calendar booking, automated follow-up for new leads, review requests to past clients, and weekly call + booking reports.</p>
-          </div>
-          <div className="rounded-3xl border border-white/10 p-6 bg-white/5">
-            <h3 className="font-semibold">Is there a contract?</h3>
-            <p className="mt-2 text-white/70 text-sm">No. Month-to-month. Cancel anytime. <span className="text-emerald-300 font-semibold">And if you hate it, you get 100% of your money back in the first 30 days.</span></p>
-          </div>
-          <div className="rounded-3xl border border-white/10 p-6 bg-white/5">
-            <h3 className="font-semibold">Do you replace my receptionist?</h3>
-            <p className="mt-2 text-white/70 text-sm">No — we make sure no call slips through the cracks, especially after-hours and weekends. Your team keeps doing what they do best.</p>
-          </div>
-          <div className="rounded-3xl border border-white/10 p-6 bg-white/5">
-            <h3 className="font-semibold">How fast can we start?</h3>
-            <p className="mt-2 text-white/70 text-sm">Setup takes under a week. You’ll see answered calls and booked consults immediately once we go live.</p>
-          </div>
-          <div className="rounded-3xl border border-emerald-400/30 p-6 bg-emerald-500/5 md:col-span-2">
-            <h3 className="font-semibold text-emerald-300">What if I’m not satisfied?</h3>
-            <p className="mt-2 text-white/70 text-sm">We stand behind our service. Try it risk-free for 30 days. If you’re not completely satisfied, we’ll refund your full first month’s fee — no questions asked.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust Section */}
-      <section className="max-w-6xl mx-auto px-4 pb-20">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Trusted by leading platforms</h2>
-          <p className="text-white/70 text-sm mb-6">While we’re new, our systems are built on proven technology used by thousands of businesses. Here are a few directories and tools we integrate with:</p>
-          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 opacity-80">
-            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">Google Business</span>
-            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">Avvo</span>
-            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">Justia</span>
-            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">FindLaw</span>
-            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">BBB</span>
-            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">Yelp</span>
-            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">CallRail</span>
-            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">Twilio</span>
-            <span className="bg-neutral-900 border border-white/10 rounded-xl px-4 py-2">Calendly</span>
           </div>
         </div>
       </section>
@@ -350,11 +255,9 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Mobile sticky CTA → Calendly */}
+      {/* Mobile sticky CTA → scroll to inline Calendly */}
       <a
-        href={CALENDLY_URL}
-        target="_blank"
-        rel="noopener noreferrer"
+        href="#demo"
         className="md:hidden fixed bottom-4 inset-x-4 px-5 py-3 rounded-2xl bg-emerald-500 text-neutral-900 font-semibold text-center shadow-2xl"
       >
         Book your free demo
