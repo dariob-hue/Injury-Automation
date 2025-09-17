@@ -284,4 +284,4 @@ export default function App() {
       <a href="#demo" className="md:hidden fixed bottom-4 inset-x-4 px-5 py-3 rounded-2xl bg-emerald-500 text-neutral-900 font-semibold text-center shadow-2xl">Book your free demo</a>
     </div>
   );
-} 
+}  
