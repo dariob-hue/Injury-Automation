@@ -96,8 +96,9 @@ export default function App() {
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/20 via-transparent to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-emerald-500/20 via-transparent to-transparent" />
         <div className="pointer-events-none absolute -right-16 -top-16 w-[420px] h-[420px] rounded-full blur-3xl bg-emerald-500/10" />
+  …
         <div className="max-w-6xl mx-auto px-4 py-20 grid md:grid-cols-2 gap-12 items-center">
           <div>
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
