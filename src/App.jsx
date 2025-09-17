@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 
-const CALENDLY_URL = "https://calendly.com/dariob-injuryautomation/15min?month=2025-09";
+/** Calendly: link target (opens in new tab) */
+const CALENDLY_URL =
+  "https://calendly.com/dariob-injuryautomation/15min?month=2025-09";
 
+/** Calendly: embed URL (explicit init; themed + no banner) */
+const CALENDLY_EMBED_URL =
+  "https://calendly.com/dariob-injuryautomation/15min?hide_gdpr_banner=1&background_color=161616&primary_color=10b981";
+
+/** Quick sanity tests so we don’t regress computations */
 function runSanityTests() {
   const testRevenue = 15000 * 2;
   const fee = 1500;
@@ -20,30 +27,42 @@ function runSanityTests() {
 
 export default function App() {
   useEffect(() => {
-    try {
-      runSanityTests();
-    } catch (e) {
-      console.warn("Sanity tests failed", e);
-    }
+    try { runSanityTests(); } catch (e) { console.warn("Sanity tests failed", e); }
   }, []);
 
-  // Smooth scroll for in-page anchors
+  // Smooth scroll for anchor links
   useEffect(() => {
-    var prev = document.documentElement.style.scrollBehavior;
+    const prev = document.documentElement.style.scrollBehavior;
     document.documentElement.style.scrollBehavior = "smooth";
-    return function cleanup() {
-      document.documentElement.style.scrollBehavior = prev || "auto";
-    };
+    return () => { document.documentElement.style.scrollBehavior = prev || "auto"; };
   }, []);
 
-  // Load Calendly embed script once (for inline widget)
+  // Load Calendly script and explicitly init the inline widget
   useEffect(() => {
-    var src = "https://assets.calendly.com/assets/external/widget.js";
-    if (!document.querySelector('script[src="' + src + '"]')) {
-      var s = document.createElement("script");
-      s.src = src;
+    const SRC = "https://assets.calendly.com/assets/external/widget.js";
+
+    function initCalendly() {
+      if (window.Calendly && document.getElementById("calendly-embed")) {
+        window.Calendly.initInlineWidget({
+          url: CALENDLY_EMBED_URL,
+          parentElement: document.getElementById("calendly-embed"),
+        });
+      } else {
+        // Try again shortly until script loads and DOM is ready
+        setTimeout(initCalendly, 200);
+      }
+    }
+
+    const existing = document.querySelector(`script[src="${SRC}"]`);
+    if (!existing) {
+      const s = document.createElement("script");
+      s.src = SRC;
       s.async = true;
+      s.onload = initCalendly;
       document.body.appendChild(s);
+    } else {
+      // If already present (e.g., from index.html), initialize immediately
+      initCalendly();
     }
   }, []);
 
@@ -259,7 +278,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Demo (Embedded Calendly) */}
+      {/* Demo (Embedded Calendly via explicit init) */}
       <section id="demo" className="max-w-3xl mx-auto px-4 pb-20">
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
           <h2 className="text-2xl font-bold">Book a Free Demo</h2>
@@ -267,8 +286,8 @@ export default function App() {
             Pick a time that works for you—no back-and-forth. Your booking is confirmed instantly.
           </p>
           <div
-            className="calendly-inline-widget mt-6 rounded-2xl overflow-hidden"
-            data-url={CALENDLY_URL}
+            id="calendly-embed"
+            className="mt-6 rounded-2xl overflow-hidden"
             style={{ minWidth: "320px", height: "700px" }}
           />
         </div>
